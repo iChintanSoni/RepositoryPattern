@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chintansoni.android.repositorypattern.util.widget.SquareCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+
+        <com.chintansoni.android.repositorypattern.util.widget.NetworkImageView
+            android:id="@+id/niv_list_item_user"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_grdnt_white_transparent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tv_list_item_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:shadowColor="@color/colorPrimary"
+                android:shadowDx="16"
+                android:shadowDy="16"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:textColor="@android:color/primary_text_dark"
+                tools:text="Abc Xyz" />
+
+            <TextView
+                android:id="@+id/tv_list_item_user_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                android:textColor="@android:color/secondary_text_dark"
+                tools:text="Def Ghi" />
+        </LinearLayout>
+    </FrameLayout>
+</com.chintansoni.android.repositorypattern.util.widget.SquareCardView>
