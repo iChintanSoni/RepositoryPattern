@@ -1,12 +1,10 @@
 package com.chintansoni.android.repositorypattern.model.local.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.chintansoni.android.repositorypattern.model.local.DatabaseConstants
 import com.chintansoni.android.repositorypattern.model.local.entity.User
 import io.reactivex.Single
+
 
 @Dao
 interface UserDao {
@@ -17,8 +15,13 @@ interface UserDao {
     fun getAllSync(): List<User>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(user: User)
+    fun insert(userList: List<User>)
 
     @Query("DELETE FROM " + DatabaseConstants.mTableUser)
     fun deleteAll()
+
+    @Transaction
+    fun insertAllUsers(userList: List<User>) {
+        insert(userList)
+    }
 }

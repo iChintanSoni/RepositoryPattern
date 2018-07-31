@@ -1,6 +1,6 @@
 package com.chintansoni.android.repositorypattern.di.module
 
-import com.chintansoni.android.repositorypattern.ui.list.ListFragment
+import com.chintansoni.android.repositorypattern.view.fragment.ListFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
