@@ -17,6 +17,6 @@ class ListViewModel @Inject constructor(private var userRepository: UserReposito
 
     fun getNextPageUsers() {
         pageNumber += 1
-        userRepository.getRemoteUsers(false, pageNumber)
+        userRepository.getNextPageUsers(pageNumber)
     }
 }
