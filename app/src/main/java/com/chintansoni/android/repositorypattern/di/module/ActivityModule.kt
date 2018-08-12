@@ -1,6 +1,6 @@
 package com.chintansoni.android.repositorypattern.di.module
 
-import com.chintansoni.android.repositorypattern.UsersActivity
+import com.chintansoni.android.repositorypattern.view.activity.UsersActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
