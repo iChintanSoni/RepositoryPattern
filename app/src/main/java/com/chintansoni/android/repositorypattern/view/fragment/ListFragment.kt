@@ -65,15 +65,14 @@ class ListFragment : DaggerFragment() {
         })
 
         srl_list.setOnRefreshListener {
-            getUsers(true)
+            viewModel.refreshUsers()
         }
     }
 
-    private fun getUsers(isForced: Boolean) {
-        viewModel.getUsers(isForced).observe(this, Observer {
+    private fun getUsers() {
+        viewModel.getUsers().observe(this, Observer {
 
             srl_list.isRefreshing = false
-
             if (it != null) {
                 if (it.status == Status.LOADING) {
                     adapter.addLoader()
@@ -93,6 +92,6 @@ class ListFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ListViewModel::class.java)
-        getUsers(true)
+        getUsers()
     }
 }
