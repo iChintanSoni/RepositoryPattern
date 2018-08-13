@@ -1,10 +1,13 @@
 package com.chintansoni.android.repositorypattern.view.adapter
 
+import android.databinding.DataBindingUtil
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.chintansoni.android.repositorypattern.R
+import com.chintansoni.android.repositorypattern.databinding.ItemLoadingBinding
+import com.chintansoni.android.repositorypattern.databinding.ItemUserBinding
 import com.chintansoni.android.repositorypattern.model.local.entity.User
 import com.chintansoni.android.repositorypattern.model.remote.response.Location
 import com.chintansoni.android.repositorypattern.model.remote.response.Name
@@ -29,9 +32,13 @@ class UserRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == ITEM_TYPE_NORMAL) {
-            return UserViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_user, parent, false))
+            var mUserBinding: ItemUserBinding = DataBindingUtil
+                    .inflate(LayoutInflater.from(parent.context), R.layout.list_item_user, parent, false)
+            return UserViewHolder(mUserBinding)
         } else {
-            return LoaderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_loader, parent, false))
+            var mLoadingBinding: ItemLoadingBinding = DataBindingUtil
+                    .inflate(LayoutInflater.from(parent.context), R.layout.list_item_loader, parent, false)
+            return LoaderViewHolder(mLoadingBinding)
         }
     }
 
