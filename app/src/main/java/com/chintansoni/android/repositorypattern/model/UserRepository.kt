@@ -1,117 +1,56 @@
 package com.chintansoni.android.repositorypattern.model
 
-import android.arch.lifecycle.MutableLiveData
 import com.chintansoni.android.repositorypattern.model.local.dao.UserDao
 import com.chintansoni.android.repositorypattern.model.local.entity.User
 import com.chintansoni.android.repositorypattern.model.remote.ApiService
 import com.chintansoni.android.repositorypattern.model.remote.response.RandomUserResponse
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.functions.Function
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserRepository @Inject constructor(private var apiService: ApiService, private var userDao: UserDao) {
 
-    private var users = MutableLiveData<Resource<List<User>>>()
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var pageNumber: Int = 0
+    private var networkBoundSource: NetworkBoundSource<List<User>, RandomUserResponse> = object : NetworkBoundSource<List<User>, RandomUserResponse>() {
+        override fun getRemote(): Single<RandomUserResponse> {
+            return apiService.getUsers(pageNumber)
+        }
 
-    fun getUsers(page: Int, isForced: Boolean): MutableLiveData<Resource<List<User>>> {
-        return if (users.value == null) {
-            pageNumber = page
-            getUsersFromLocalAndRemote(isForced)
-            users
-        } else {
-            if (pageNumber == page) {
-                users.value = users.value
-            } else {
-                pageNumber = page
-                getUsersFromLocalAndRemote(isForced)
+        override fun getLocal(): Flowable<List<User>> {
+            return userDao.getAll()
+        }
+
+        override fun saveCallResult(data: List<User>, isForced: Boolean) {
+            if (isForced) {
+                userDao.deleteAll()
             }
-            users
+            userDao.insertAllUsers(data)
+        }
+
+        override fun mapper(): Function<RandomUserResponse, List<User>> {
+            return EntityMapper.convert()
         }
     }
+    private var flowable: Flowable<Resource<List<User>>> = Flowable.create(networkBoundSource, BackpressureStrategy.BUFFER)
 
-    fun getNextPageUsers(page: Int) {
-        if (pageNumber == page) {
-            users.value = users.value
-        } else {
-            pageNumber = page
-            getUsersFromRemote()
-        }
+    fun getFlowableResourceListUser(): Flowable<Resource<List<User>>> {
+        return flowable
     }
 
-    private fun getUsersFromRemote() {
-        users.value = Resource.loading()
-        val disposable = getFromNetwork(pageNumber)
-                .flatMap {
-                    return@flatMap insertIntoDatabase(false, it)
-                }
-                .flatMap {
-                    return@flatMap getFromDatabase()
-                }
-                .subscribe({
-                    users.value = Resource.success(it)
-                }, {
-                    users.value = Resource.error(it)
-                })
-        compositeDisposable.add(disposable)
+    fun refresh() {
+        networkBoundSource.refresh()
     }
 
-    private fun getUsersFromLocalAndRemote(isForced: Boolean) {
-        val disposable = getFromDatabase()
-                .flatMap {
-                    users.value = Resource.success(it)
-                    users.value = Resource.loading()
-                    return@flatMap getFromNetwork(pageNumber)
-                }
-                .flatMap {
-                    return@flatMap insertIntoDatabase(isForced, it)
-                }
-                .flatMap {
-                    return@flatMap getFromDatabase()
-                }
-                .subscribe({
-                    users.value = Resource.success(it)
-                }, {
-                    users.value = Resource.error(it)
-                })
-        compositeDisposable.add(disposable)
+    fun fetchUsers(isForced: Boolean) {
+        networkBoundSource.fetch(isForced)
     }
 
-    private fun getFromDatabase(): Single<List<User>> {
-        return userDao.getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    private fun getFromNetwork(pageNumber: Int): Single<RandomUserResponse> {
-        return apiService.getUsers(pageNumber)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    private fun insertIntoDatabase(forced: Boolean, randomUserResponse: RandomUserResponse?): Single<List<User>> {
-        return Single.create<List<User>> {
-            val userList = ArrayList<User>()
-            if (randomUserResponse?.results != null && randomUserResponse.results!!.isNotEmpty()) {
-                for (resultItem in randomUserResponse.results!!) {
-                    userList.add(User(0, resultItem.name, resultItem.picture, resultItem.location))
-                }
-                userDao.insertAllUsers(userList)
-            }
-            it.onSuccess(userList)
-        }
-                .doOnSubscribe {
-                    // If Forced, then first clear all the data
-                    if (forced) {
-                        userDao.deleteAll()
-                    }
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+    fun getNextPageUsers() {
+        pageNumber += 1
+        networkBoundSource.getRemoteData(false)
     }
 }
