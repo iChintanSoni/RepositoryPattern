@@ -1,51 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.chintansoni.android.repositorypattern.util.widget.SquareCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="0dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <data class="ItemUserBinding">
+
+        <variable
+            name="user"
+            type="com.chintansoni.android.repositorypattern.model.local.entity.User" />
+    </data>
+
+    <com.chintansoni.android.repositorypattern.util.widget.SquareCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp">
 
-        <com.chintansoni.android.repositorypattern.util.widget.NetworkImageView
-            android:id="@+id/niv_list_item_user"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@drawable/bg_grdnt_white_transparent"
-            android:orientation="vertical"
-            android:padding="16dp">
+            <com.chintansoni.android.repositorypattern.util.widget.NetworkImageView
+                android:id="@+id/niv_list_item_user"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                app:imageUrl="@{user.picture.large}"
+                tools:src="@tools:sample/avatars" />
 
-            <TextView
-                android:id="@+id/tv_list_item_user_name"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:shadowColor="@color/colorPrimary"
-                android:shadowDx="16"
-                android:shadowDy="16"
-                android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:textColor="@android:color/primary_text_dark"
-                tools:text="Abc Xyz" />
+                android:layout_gravity="bottom"
+                android:background="@drawable/bg_grdnt_white_transparent"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tv_list_item_user_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                android:textColor="@android:color/secondary_text_dark"
-                tools:text="Def Ghi" />
-        </LinearLayout>
-    </FrameLayout>
-</com.chintansoni.android.repositorypattern.util.widget.SquareCardView>
+                <TextView
+                    android:id="@+id/tv_list_item_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:shadowColor="@color/colorPrimary"
+                    android:shadowDx="16"
+                    android:shadowDy="16"
+                    android:singleLine="true"
+                    android:text="@{user.name.first+' '+user.name.last}"
+                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                    android:textColor="@android:color/primary_text_dark"
+                    tools:text="@tools:sample/full_names" />
+
+                <TextView
+                    android:id="@+id/tv_list_item_user_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text='@{user.location.city+", "+user.location.state}'
+                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                    android:textColor="@android:color/secondary_text_dark"
+                    tools:text="@tools:sample/cities" />
+            </LinearLayout>
+        </FrameLayout>
+    </com.chintansoni.android.repositorypattern.util.widget.SquareCardView>
+</layout>

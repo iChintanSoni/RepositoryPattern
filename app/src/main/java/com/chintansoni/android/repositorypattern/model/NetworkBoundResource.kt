@@ -10,7 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 
-abstract class NetworkBoundSource<LocalType, RemoteType> : FlowableOnSubscribe<Resource<LocalType>> {
+abstract class NetworkBoundResource<LocalType, RemoteType> : FlowableOnSubscribe<Resource<LocalType>> {
 
     private var emitter: FlowableEmitter<Resource<LocalType>>? = null
 
