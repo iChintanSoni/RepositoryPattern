@@ -15,7 +15,7 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(private var apiService: ApiService, private var userDao: UserDao) {
 
     private var pageNumber: Int = 0
-    private var networkBoundSource: NetworkBoundSource<List<User>, RandomUserResponse> = object : NetworkBoundSource<List<User>, RandomUserResponse>() {
+    private var networkBoundSource: NetworkBoundResource<List<User>, RandomUserResponse> = object : NetworkBoundResource<List<User>, RandomUserResponse>() {
         override fun getRemote(): Single<RandomUserResponse> {
             return apiService.getUsers(pageNumber)
         }
