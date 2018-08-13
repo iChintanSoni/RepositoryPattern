@@ -1,6 +1,6 @@
 package com.chintansoni.android.repositorypattern.view.viewholder
 
 import android.support.v7.widget.RecyclerView
-import android.view.View
+import com.chintansoni.android.repositorypattern.databinding.ItemLoadingBinding
 
-class LoaderViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+class LoaderViewHolder(mLoadingBinding: ItemLoadingBinding) : RecyclerView.ViewHolder(mLoadingBinding.root)

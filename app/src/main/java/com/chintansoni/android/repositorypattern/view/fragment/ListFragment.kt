@@ -2,6 +2,7 @@ package com.chintansoni.android.repositorypattern.view.fragment
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.chintansoni.android.repositorypattern.R
+import com.chintansoni.android.repositorypattern.databinding.ListFragmentBinding
 import com.chintansoni.android.repositorypattern.model.Status
 import com.chintansoni.android.repositorypattern.view.adapter.UserRecyclerAdapter
 import com.chintansoni.android.repositorypattern.viewmodel.KotlinViewModelFactory
@@ -24,6 +26,8 @@ class ListFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: KotlinViewModelFactory
 
+    lateinit var mFragmentBinding: ListFragmentBinding
+
     companion object {
         fun newInstance() = ListFragment()
     }
@@ -32,7 +36,8 @@ class ListFragment : DaggerFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.list_fragment, container, false)
+        mFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.list_fragment, container, false)
+        return mFragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,9 +49,9 @@ class ListFragment : DaggerFragment() {
 
     private fun initViews() {
         adapter = UserRecyclerAdapter()
-        rv_users.adapter = adapter
+        mFragmentBinding.rvUsers.adapter = adapter
 
-        rv_users.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        mFragmentBinding.rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!adapter.isLoading()) {
@@ -65,15 +70,14 @@ class ListFragment : DaggerFragment() {
         })
 
         srl_list.setOnRefreshListener {
-            getUsers(true)
+            viewModel.refreshUsers()
         }
     }
 
-    private fun getUsers(isForced: Boolean) {
-        viewModel.getUsers(isForced).observe(this, Observer {
+    private fun getUsers() {
+        viewModel.getUsers().observe(this, Observer {
 
             srl_list.isRefreshing = false
-
             if (it != null) {
                 if (it.status == Status.LOADING) {
                     adapter.addLoader()
@@ -93,6 +97,6 @@ class ListFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ListViewModel::class.java)
-        getUsers(true)
+        getUsers()
     }
 }

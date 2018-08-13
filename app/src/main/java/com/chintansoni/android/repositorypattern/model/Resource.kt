@@ -19,4 +19,8 @@ class Resource<out T>(val status: Status, val data: T?, val throwable: Throwable
             return Resource(Status.LOADING, null, null)
         }
     }
+
+    override fun toString(): String {
+        return "Resource(status=$status, data=$data, throwable=$throwable)"
+    }
 }
