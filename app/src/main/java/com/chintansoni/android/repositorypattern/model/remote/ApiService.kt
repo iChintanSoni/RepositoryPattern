@@ -9,6 +9,5 @@ interface ApiService {
 
     @GET("api")
     fun getUsers(@Query("page") page: Int,
-                 @Query("results") result: Int = 10,
-                 @Query("inc") include: String = "name,picture,location"): Single<RandomUserResponse>
+                 @Query("results") result: Int = 10): Single<RandomUserResponse>
 }

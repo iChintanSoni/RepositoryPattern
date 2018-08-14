@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Repository Pattern</string>
+    <string name="users">Users</string>
 </resources>

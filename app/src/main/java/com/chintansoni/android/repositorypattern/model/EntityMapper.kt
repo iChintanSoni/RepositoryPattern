@@ -9,7 +9,13 @@ object EntityMapper {
         return Function {
             val users: ArrayList<User> = ArrayList()
             for (result in it.results!!.iterator()) {
-                users.add(User(0, result.name, result.picture, result.location))
+                users.add(User(id = 0,
+                        name = result.name,
+                        email = result.email,
+                        cell = result.cell,
+                        picture = result.picture,
+                        location = result.location,
+                        dob = result.dob))
             }
             users.toList()
         }
