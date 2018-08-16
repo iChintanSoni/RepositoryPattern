@@ -13,6 +13,8 @@ import android.widget.Toast
 import com.chintansoni.android.repositorypattern.R
 import com.chintansoni.android.repositorypattern.databinding.ListFragmentBinding
 import com.chintansoni.android.repositorypattern.model.Status
+import com.chintansoni.android.repositorypattern.model.local.entity.User
+import com.chintansoni.android.repositorypattern.util.smartrecyclerview.RecyclerViewItemClickListener
 import com.chintansoni.android.repositorypattern.view.adapter.UserRecyclerAdapter
 import com.chintansoni.android.repositorypattern.viewmodel.KotlinViewModelFactory
 import com.chintansoni.android.repositorypattern.viewmodel.ListViewModel
@@ -21,7 +23,11 @@ import kotlinx.android.synthetic.main.list_fragment.*
 import javax.inject.Inject
 
 
-class ListFragment : DaggerFragment() {
+class ListFragment : DaggerFragment(), RecyclerViewItemClickListener.ItemTouchListener {
+
+    override fun onItemClick(position: Int) {
+        callback.onRequestDetailsFragment(adapter.getItem(position))
+    }
 
     @Inject
     lateinit var viewModelFactory: KotlinViewModelFactory
@@ -33,10 +39,12 @@ class ListFragment : DaggerFragment() {
     }
 
     private lateinit var viewModel: ListViewModel
+    private lateinit var callback: ActivityCallbacks
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         mFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.list_fragment, container, false)
+        callback = requireContext() as ActivityCallbacks
         return mFragmentBinding.root
     }
 
@@ -49,9 +57,9 @@ class ListFragment : DaggerFragment() {
 
     private fun initViews() {
         adapter = UserRecyclerAdapter()
-        mFragmentBinding.rvUsers.adapter = adapter
-
-        mFragmentBinding.rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        rvUsers.adapter = adapter
+        rvUsers.addOnItemTouchListener(RecyclerViewItemClickListener(requireContext(), this))
+        rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!adapter.isLoading()) {
@@ -98,5 +106,9 @@ class ListFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ListViewModel::class.java)
         getUsers()
+    }
+
+    interface ActivityCallbacks {
+        fun onRequestDetailsFragment(user: User)
     }
 }

@@ -5,17 +5,33 @@
 
     <data class="ListFragmentBinding" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.fragment.ListFragment">
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvUsers"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/users"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/srl_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            tools:listitem="@layout/list_item_user" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+            tools:context=".view.fragment.ListFragment">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvUsers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_user" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 </layout>

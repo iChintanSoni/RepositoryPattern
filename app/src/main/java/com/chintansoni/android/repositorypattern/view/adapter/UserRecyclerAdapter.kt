@@ -9,6 +9,7 @@ import com.chintansoni.android.repositorypattern.R
 import com.chintansoni.android.repositorypattern.databinding.ItemLoadingBinding
 import com.chintansoni.android.repositorypattern.databinding.ItemUserBinding
 import com.chintansoni.android.repositorypattern.model.local.entity.User
+import com.chintansoni.android.repositorypattern.model.remote.response.Dob
 import com.chintansoni.android.repositorypattern.model.remote.response.Location
 import com.chintansoni.android.repositorypattern.model.remote.response.Name
 import com.chintansoni.android.repositorypattern.model.remote.response.Picture
@@ -66,7 +67,7 @@ class UserRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private fun getLoaderItem(): User {
-        return User(0, Name(), Picture(), Location())
+        return User(id = 0, name = Name(), picture = Picture(), location = Location(), email = "", dob = Dob(), cell = "", gender = "")
     }
 
     fun addLoader() {
@@ -89,5 +90,9 @@ class UserRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun isLoading(): Boolean {
         return list.isEmpty() || list.last().id == 0
+    }
+
+    fun getItem(position: Int): User {
+        return list.get(position)
     }
 }
