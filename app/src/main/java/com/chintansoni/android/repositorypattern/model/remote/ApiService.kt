@@ -9,5 +9,6 @@ interface ApiService {
 
     @GET("api")
     fun getUsers(@Query("page") page: Int,
-                 @Query("results") result: Int = 10): Single<RandomUserResponse>
+                 @Query("results") result: Int = 10,
+                 @Query("lang") lang: String = "en"): Single<RandomUserResponse>
 }

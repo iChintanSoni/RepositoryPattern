@@ -57,10 +57,9 @@ class ListFragment : DaggerFragment(), RecyclerViewItemClickListener.ItemTouchLi
 
     private fun initViews() {
         adapter = UserRecyclerAdapter()
-        mFragmentBinding.rvUsers.adapter = adapter
-        mFragmentBinding.rvUsers.addOnItemTouchListener(RecyclerViewItemClickListener(requireContext(), this))
-
-        mFragmentBinding.rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        rvUsers.adapter = adapter
+        rvUsers.addOnItemTouchListener(RecyclerViewItemClickListener(requireContext(), this))
+        rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!adapter.isLoading()) {
