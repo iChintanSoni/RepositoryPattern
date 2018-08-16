@@ -67,7 +67,7 @@ class UserRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private fun getLoaderItem(): User {
-        return User(id = 0, name = Name(), picture = Picture(), location = Location(), email = "", dob = Dob(), cell = "")
+        return User(id = 0, name = Name(), picture = Picture(), location = Location(), email = "", dob = Dob(), cell = "", gender = "")
     }
 
     fun addLoader() {

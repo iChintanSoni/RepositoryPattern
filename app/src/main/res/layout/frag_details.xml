@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data class="DetailFragmentBinding">
@@ -26,12 +27,14 @@
             android:src="@drawable/ic_close_black_24dp" />
 
         <com.chintansoni.android.repositorypattern.util.widget.CircleImageView
-            imageUrl="@{user.picture.large}"
+            android:id="@+id/ivUserAvatar"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:adjustViewBounds="true"
+            app:gender="@{user.gender}"
+            app:imageUrl="@{user.picture.large}"
             tools:src="@tools:sample/avatars" />
 
         <TextView

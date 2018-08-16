@@ -12,6 +12,7 @@ object EntityMapper {
                 users.add(User(id = 0,
                         name = result.name,
                         email = result.email,
+                        gender = result.gender,
                         cell = result.cell,
                         picture = result.picture,
                         location = result.location,

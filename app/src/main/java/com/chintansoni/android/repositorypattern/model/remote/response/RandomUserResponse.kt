@@ -20,6 +20,8 @@ data class ResultsItem(@SerializedName("phone")
                        var cell: String = "",
                        @SerializedName("email")
                        var email: String = "",
+                       @SerializedName("gender")
+                       var gender: String = "",
                        @SerializedName("picture")
                        var picture: Picture)
 

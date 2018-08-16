@@ -20,6 +20,7 @@ data class User(
         @Embedded
         val name: Name,
         val email: String,
+        val gender: String,
         val cell: String,
         @Embedded
         val picture: Picture,

@@ -21,11 +21,12 @@
         android:paddingTop="8dp">
 
         <com.chintansoni.android.repositorypattern.util.widget.CircleImageView
-            android:id="@+id/niv_list_item_user"
+            android:id="@+id/iv_list_item_user"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
+            app:gender="@{user.gender}"
             app:imageUrl="@{user.picture.large}"
             tools:src="@tools:sample/avatars" />
 

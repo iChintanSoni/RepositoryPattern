@@ -8,22 +8,18 @@ import android.view.View
 
 class RecyclerViewItemClickListener(var context: Context, var listener: ItemTouchListener) : RecyclerView.OnItemTouchListener {
 
-    var gestureDetector: GestureDetector
-
-    init {
-        gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapUp(e: MotionEvent?): Boolean {
-                return true
-            }
-        })
-    }
+    var gestureDetector: GestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            return true
+        }
+    })
 
     override fun onTouchEvent(rv: RecyclerView?, e: MotionEvent?) {
     }
 
     override fun onInterceptTouchEvent(rv: RecyclerView?, e: MotionEvent?): Boolean {
-        var childView: View = rv?.findChildViewUnder(e?.x!!.toFloat(), e.y.toFloat()) as View
-        if (childView != null && listener != null && gestureDetector.onTouchEvent(e)) {
+        var childView = rv?.findChildViewUnder(e?.x!!.toFloat(), e.y) as View
+        if (gestureDetector.onTouchEvent(e)) {
             listener.onItemClick(rv.getChildAdapterPosition(childView))
             return true
         }
