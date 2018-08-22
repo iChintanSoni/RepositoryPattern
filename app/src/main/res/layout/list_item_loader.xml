@@ -6,20 +6,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:gravity="center_horizontal">
 
-        <ProgressBar
-            android:id="@+id/progressbar"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
+        <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/skvLoading"
+            style="@style/SpinKitView.ThreeBounce"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:text="Loading..." />
+            app:SpinKit_Color="@color/colorAccent" />
     </LinearLayout>
 </layout>
