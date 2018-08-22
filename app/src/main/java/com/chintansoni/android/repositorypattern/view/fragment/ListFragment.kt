@@ -94,9 +94,7 @@ class ListFragment : DaggerFragment(), RecyclerViewItemClickListener.ItemTouchLi
                     adapter.setList(ArrayList(it.data))
                 } else {
                     adapter.removeLoader()
-                    if (adapter.itemCount == 0) {
-                        Toast.makeText(context, "Could not fetch new feed.", Toast.LENGTH_LONG).show()
-                    }
+                    Toast.makeText(context, "Could not fetch new feed.", Toast.LENGTH_LONG).show()
                 }
             }
         })
