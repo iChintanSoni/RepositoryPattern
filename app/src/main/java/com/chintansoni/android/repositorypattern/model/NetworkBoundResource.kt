@@ -6,7 +6,6 @@ import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter
 import io.reactivex.FlowableOnSubscribe
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 
@@ -33,19 +32,20 @@ abstract class NetworkBoundResource<LocalType, RemoteType> : FlowableOnSubscribe
     fun fetch(isForced: Boolean) {
         getLocal()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .subscribe {
                     emitter?.onNext(success(it))
                 }
-        getRemote()
-                .map(mapper())
+
+        getRemote().map(mapper())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({ localTypeData ->
                     saveCallResult(localTypeData, isForced)
                 }, {
-                    Resource.error<LocalType>(it)
+                    emitter?.onNext(Resource.error(it))
                 })
+
     }
 
     fun getRemoteData(isForced: Boolean) {
@@ -56,7 +56,7 @@ abstract class NetworkBoundResource<LocalType, RemoteType> : FlowableOnSubscribe
                 .subscribe({ localTypeData ->
                     saveCallResult(localTypeData, isForced)
                 }, {
-                    Resource.error<LocalType>(it)
+                    emitter?.onNext(Resource.error(it))
                 })
     }
 }

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import com.chintansoni.android.repositorypattern.view.adapter.UserRecyclerAdapter
 
 class RecyclerViewItemClickListener(var context: Context, var listener: ItemTouchListener) : RecyclerView.OnItemTouchListener {
 
@@ -18,10 +19,12 @@ class RecyclerViewItemClickListener(var context: Context, var listener: ItemTouc
     }
 
     override fun onInterceptTouchEvent(rv: RecyclerView?, e: MotionEvent?): Boolean {
-        var childView = rv?.findChildViewUnder(e?.x!!.toFloat(), e.y) as View
-        if (gestureDetector.onTouchEvent(e)) {
-            listener.onItemClick(rv.getChildAdapterPosition(childView))
-            return true
+        if ((rv?.adapter as UserRecyclerAdapter).itemCount != 0) {
+            var childView = rv.findChildViewUnder(e?.x!!.toFloat(), e.y) as View
+            if (gestureDetector.onTouchEvent(e)) {
+                listener.onItemClick(rv.getChildAdapterPosition(childView))
+                return true
+            }
         }
         return false
     }
