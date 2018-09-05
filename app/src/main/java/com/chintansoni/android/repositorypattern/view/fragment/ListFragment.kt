@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,6 @@ import android.widget.Toast
 import com.chintansoni.android.repositorypattern.R
 import com.chintansoni.android.repositorypattern.databinding.ListFragmentBinding
 import com.chintansoni.android.repositorypattern.model.Status
-import com.chintansoni.android.repositorypattern.model.local.entity.User
-import com.chintansoni.android.repositorypattern.util.smartrecyclerview.RecyclerViewItemClickListener
 import com.chintansoni.android.repositorypattern.view.adapter.UserRecyclerAdapter
 import com.chintansoni.android.repositorypattern.viewmodel.KotlinViewModelFactory
 import com.chintansoni.android.repositorypattern.viewmodel.ListViewModel
@@ -23,11 +22,7 @@ import kotlinx.android.synthetic.main.list_fragment.*
 import javax.inject.Inject
 
 
-class ListFragment : DaggerFragment(), RecyclerViewItemClickListener.ItemTouchListener {
-
-    override fun onItemClick(position: Int) {
-        callback.onRequestDetailsFragment(adapter.getItem(position))
-    }
+class ListFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: KotlinViewModelFactory
@@ -39,12 +34,10 @@ class ListFragment : DaggerFragment(), RecyclerViewItemClickListener.ItemTouchLi
     }
 
     private lateinit var viewModel: ListViewModel
-    private lateinit var callback: ActivityCallbacks
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         mFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.list_fragment, container, false)
-        callback = requireContext() as ActivityCallbacks
         return mFragmentBinding.root
     }
 
@@ -56,21 +49,24 @@ class ListFragment : DaggerFragment(), RecyclerViewItemClickListener.ItemTouchLi
     private lateinit var adapter: UserRecyclerAdapter
 
     private fun initViews() {
-        adapter = UserRecyclerAdapter()
+        adapter = UserRecyclerAdapter(requireContext())
         rvUsers.adapter = adapter
-        rvUsers.addOnItemTouchListener(RecyclerViewItemClickListener(requireContext(), this))
+
+        val animator = rvUsers.itemAnimator
+        if (animator is SimpleItemAnimator) {
+            animator.supportsChangeAnimations = false
+        }
         rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!adapter.isLoading()) {
                     val linearLayoutManager: LinearLayoutManager = recyclerView!!.layoutManager as LinearLayoutManager
-                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() >= linearLayoutManager.itemCount - 5) {
+                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition() >= linearLayoutManager.itemCount - 2) {
 
                         // add progress bar, the loading footer
                         recyclerView.post {
                             adapter.addLoader()
                         }
-
                         viewModel.getNextPageUsers()
                     }
                 }
@@ -104,9 +100,5 @@ class ListFragment : DaggerFragment(), RecyclerViewItemClickListener.ItemTouchLi
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ListViewModel::class.java)
         getUsers()
-    }
-
-    interface ActivityCallbacks {
-        fun onRequestDetailsFragment(user: User)
     }
 }

@@ -20,7 +20,7 @@ class UserRepository @Inject constructor(private var apiService: ApiService, pri
             return apiService.getUsers(pageNumber)
         }
 
-        override fun getLocal(): Flowable<List<User>> {
+        override fun getLocal(): Single<List<User>> {
             return userDao.getAll()
         }
 
