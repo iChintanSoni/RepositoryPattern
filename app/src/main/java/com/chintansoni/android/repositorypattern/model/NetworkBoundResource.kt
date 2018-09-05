@@ -2,7 +2,6 @@ package com.chintansoni.android.repositorypattern.model
 
 import com.chintansoni.android.repositorypattern.model.Resource.Companion.loading
 import com.chintansoni.android.repositorypattern.model.Resource.Companion.success
-import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter
 import io.reactivex.FlowableOnSubscribe
 import io.reactivex.Single
@@ -19,7 +18,7 @@ abstract class NetworkBoundResource<LocalType, RemoteType> : FlowableOnSubscribe
 
     abstract fun getRemote(): Single<RemoteType>
 
-    abstract fun getLocal(): Flowable<LocalType>
+    abstract fun getLocal(): Single<LocalType>
 
     abstract fun saveCallResult(data: LocalType, isForced: Boolean)
 
@@ -33,18 +32,32 @@ abstract class NetworkBoundResource<LocalType, RemoteType> : FlowableOnSubscribe
         getLocal()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe {
+                .flatMap {
                     emitter?.onNext(success(it))
-                }
-
-        getRemote().map(mapper())
+                    return@flatMap getRemote()
+                }.map(mapper())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe({ localTypeData ->
-                    saveCallResult(localTypeData, isForced)
+                .flatMap {
+                    saveCallResult(it, isForced)
+                    return@flatMap getLocal()
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    emitter?.onNext(success(it))
                 }, {
                     emitter?.onNext(Resource.error(it))
                 })
+
+//        getRemote().map(mapper())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.io())
+//                .subscribe({ localTypeData ->
+//                    saveCallResult(localTypeData, isForced)
+//                }, {
+//                    emitter?.onNext(Resource.error(it))
+//                })
 
     }
 
@@ -53,8 +66,14 @@ abstract class NetworkBoundResource<LocalType, RemoteType> : FlowableOnSubscribe
         getRemote().map(mapper())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe({ localTypeData ->
-                    saveCallResult(localTypeData, isForced)
+                .flatMap {
+                    saveCallResult(it, isForced)
+                    return@flatMap getLocal()
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    emitter?.onNext(success(it))
                 }, {
                     emitter?.onNext(Resource.error(it))
                 })

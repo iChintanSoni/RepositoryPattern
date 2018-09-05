@@ -8,16 +8,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background"
         android:orientation="vertical">
 
-        <TextView
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/users"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:layout_height="?actionBarSize"
+            android:theme="@style/AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/users"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/srl_list"

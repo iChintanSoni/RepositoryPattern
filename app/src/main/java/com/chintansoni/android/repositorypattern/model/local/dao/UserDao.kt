@@ -3,12 +3,12 @@ package com.chintansoni.android.repositorypattern.model.local.dao
 import android.arch.persistence.room.*
 import com.chintansoni.android.repositorypattern.model.local.DatabaseConstants
 import com.chintansoni.android.repositorypattern.model.local.entity.User
-import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface UserDao {
     @Query("SELECT * FROM " + DatabaseConstants.mTableUser)
-    fun getAll(): Flowable<List<User>>
+    fun getAll(): Single<List<User>>
 
     @Query("SELECT * FROM " + DatabaseConstants.mTableUser)
     fun getAllSync(): List<User>
