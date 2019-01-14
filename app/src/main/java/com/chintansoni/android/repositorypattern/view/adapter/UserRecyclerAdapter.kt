@@ -1,12 +1,11 @@
 package com.chintansoni.android.repositorypattern.view.adapter
 
 import android.content.Context
-import android.databinding.DataBindingUtil
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
 import com.chintansoni.android.repositorypattern.R
 import com.chintansoni.android.repositorypattern.databinding.ItemLoadingBinding
 import com.chintansoni.android.repositorypattern.databinding.ItemUserBinding
@@ -19,7 +18,8 @@ import com.chintansoni.android.repositorypattern.util.UserDiffUtil
 import com.chintansoni.android.repositorypattern.view.viewholder.LoaderViewHolder
 import com.chintansoni.android.repositorypattern.view.viewholder.UserViewHolder
 
-class UserRecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class UserRecyclerAdapter(context: Context) :
+    androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
 
     private val list: ArrayList<User> = ArrayList()
     private val ITEM_TYPE_NORMAL = 1
@@ -38,14 +38,17 @@ class UserRecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         return if (viewType == ITEM_TYPE_NORMAL) {
             val mUserBinding: ItemUserBinding = DataBindingUtil
-                    .inflate(LayoutInflater.from(parent.context), R.layout.list_item_user, parent, false)
+                .inflate(LayoutInflater.from(parent.context), R.layout.list_item_user, parent, false)
             UserViewHolder(mUserBinding)
         } else {
             val mLoadingBinding: ItemLoadingBinding = DataBindingUtil
-                    .inflate(LayoutInflater.from(parent.context), R.layout.list_item_loader, parent, false)
+                .inflate(LayoutInflater.from(parent.context), R.layout.list_item_loader, parent, false)
             LoaderViewHolder(mLoadingBinding)
         }
     }
@@ -54,7 +57,7 @@ class UserRecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.
         return list.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
 
         var clickListener: View.OnClickListener = View.OnClickListener {
             listener.onItemClick(list[holder.adapterPosition])
@@ -80,7 +83,16 @@ class UserRecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.
     }
 
     private fun getLoaderItem(): User {
-        return User(id = 0, name = Name(), picture = Picture(), location = Location(), email = "", dob = Dob(), cell = "", gender = "")
+        return User(
+            id = 0,
+            name = Name(),
+            picture = Picture(),
+            location = Location(),
+            email = "",
+            dob = Dob(),
+            cell = "",
+            gender = ""
+        )
     }
 
     fun addLoader() {
@@ -106,7 +118,7 @@ class UserRecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.
     }
 
     fun getItem(position: Int): User {
-        return list.get(position)
+        return list[position]
     }
 
     interface ItemTouchListener {

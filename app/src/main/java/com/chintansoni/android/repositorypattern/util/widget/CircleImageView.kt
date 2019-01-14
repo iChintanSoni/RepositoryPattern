@@ -3,12 +3,14 @@ package com.chintansoni.android.repositorypattern.util.widget
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Path
-import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatImageView
 
 class CircleImageView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
+
+    var path = Path()
 
     var radius: Float = 0f
     var centerX: Float = 0f
@@ -23,7 +25,6 @@ class CircleImageView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas?) {
-        var path = Path()
         path.addCircle(centerX, centerY, radius, Path.Direction.CW)
         canvas?.clipPath(path)
         super.onDraw(canvas)

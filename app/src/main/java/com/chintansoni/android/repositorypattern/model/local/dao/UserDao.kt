@@ -1,6 +1,6 @@
 package com.chintansoni.android.repositorypattern.model.local.dao
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.chintansoni.android.repositorypattern.model.local.DatabaseConstants
 import com.chintansoni.android.repositorypattern.model.local.entity.User
 import io.reactivex.Single

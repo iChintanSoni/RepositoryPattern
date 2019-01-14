@@ -1,6 +1,6 @@
 package com.chintansoni.android.repositorypattern.util
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import com.chintansoni.android.repositorypattern.model.local.entity.User
 
 class UserDiffUtil(private val newList: ArrayList<User>? = null, private val oldList: ArrayList<User>? = null) : DiffUtil.Callback() {

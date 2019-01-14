@@ -7,11 +7,11 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.chintansoni.android.repositorypattern"
         minSdkVersion 17
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         dataBinding.enabled true
@@ -39,13 +39,13 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.android.support:design:27.1.1'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
 
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha01'
 
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
@@ -54,25 +54,32 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    implementation 'com.google.dagger:dagger:2.15'
-    kapt "com.google.dagger:dagger-compiler:2.15"
-    implementation 'com.google.dagger:dagger-android-support:2.15'
-    kapt "com.google.dagger:dagger-android-processor:2.15"
+//    implementation 'com.google.dagger:dagger:2.15'
+//    kapt "com.google.dagger:dagger-compiler:2.15"
+//    implementation 'com.google.dagger:dagger-android-support:2.15'
+//    kapt "com.google.dagger:dagger-android-processor:2.15"
 
     def room_version = "1.1.1"
     // or, for latest rc, use "1.1.1-rc1"
-    implementation "android.arch.persistence.room:runtime:$room_version"
-    kapt "android.arch.persistence.room:compiler:$room_version"
+    implementation 'androidx.room:room-runtime:2.1.0-alpha03'
+    kapt 'androidx.room:room-compiler:2.1.0-alpha03'
 
-    implementation "android.arch.lifecycle:reactivestreams:$room_version"
+    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.1.0-alpha01'
 
     // optional - RxJava support for Room
-    implementation "android.arch.persistence.room:rxjava2:$room_version"
+    implementation 'androidx.room:room-rxjava2:2.1.0-alpha03'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    kapt 'androidx.annotation:annotation:1.0.1'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'com.github.ybq:Android-SpinKit:1.1.0'
+
+    def koin_version = "1.0.2"
+    implementation "org.koin:koin-core:$koin_version"
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
 }

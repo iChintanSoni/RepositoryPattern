@@ -1,31 +1,23 @@
 package com.chintansoni.android.repositorypattern.view.fragment
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.chintansoni.android.repositorypattern.R
 import com.chintansoni.android.repositorypattern.databinding.ListFragmentBinding
 import com.chintansoni.android.repositorypattern.model.Status
 import com.chintansoni.android.repositorypattern.view.adapter.UserRecyclerAdapter
-import com.chintansoni.android.repositorypattern.viewmodel.KotlinViewModelFactory
 import com.chintansoni.android.repositorypattern.viewmodel.ListViewModel
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.list_fragment.*
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
-class ListFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: KotlinViewModelFactory
+class ListFragment : Fragment() {
 
     lateinit var mFragmentBinding: ListFragmentBinding
 
@@ -33,10 +25,12 @@ class ListFragment : DaggerFragment() {
         fun newInstance() = ListFragment()
     }
 
-    private lateinit var viewModel: ListViewModel
+    private val viewModel by viewModel<ListViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         mFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.list_fragment, container, false)
         return mFragmentBinding.root
     }
@@ -53,14 +47,15 @@ class ListFragment : DaggerFragment() {
         rvUsers.adapter = adapter
 
         val animator = rvUsers.itemAnimator
-        if (animator is SimpleItemAnimator) {
+        if (animator is androidx.recyclerview.widget.SimpleItemAnimator) {
             animator.supportsChangeAnimations = false
         }
-        rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        rvUsers.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!adapter.isLoading()) {
-                    val linearLayoutManager: LinearLayoutManager = recyclerView!!.layoutManager as LinearLayoutManager
+                    val linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager =
+                        recyclerView.layoutManager as androidx.recyclerview.widget.LinearLayoutManager
                     if (linearLayoutManager.findLastCompletelyVisibleItemPosition() >= linearLayoutManager.itemCount - 2) {
 
                         // add progress bar, the loading footer
@@ -98,7 +93,6 @@ class ListFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ListViewModel::class.java)
         getUsers()
     }
 }

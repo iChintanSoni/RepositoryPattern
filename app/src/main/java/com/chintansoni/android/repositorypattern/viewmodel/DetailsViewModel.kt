@@ -1,5 +1,5 @@
 package com.chintansoni.android.repositorypattern.viewmodel
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 
 class DetailsViewModel : ViewModel()
