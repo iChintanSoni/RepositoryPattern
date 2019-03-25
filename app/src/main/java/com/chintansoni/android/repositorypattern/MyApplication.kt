@@ -1,16 +1,23 @@
 package com.chintansoni.android.repositorypattern
 
-import com.chintansoni.android.repositorypattern.di.component.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
+import android.app.Application
+import com.chintansoni.android.repositorypattern.di.databaseModule
+import com.chintansoni.android.repositorypattern.di.networkModule
+import com.chintansoni.android.repositorypattern.di.viewModelModule
+import org.koin.android.ext.android.startKoin
 import timber.log.Timber
 
-class MyApplication : DaggerApplication() {
+class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
         initializeTimber()
+        initializeKoin()
+    }
+
+    private fun initializeKoin() {
+        startKoin(this, listOf(networkModule, databaseModule, viewModelModule))
     }
 
     private fun initializeTimber() {
@@ -19,9 +26,4 @@ class MyApplication : DaggerApplication() {
         }
     }
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().application(this).build()
-        appComponent.inject(this)
-        return appComponent
-    }
 }

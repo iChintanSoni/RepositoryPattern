@@ -8,34 +8,33 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Function
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class UserRepository @Inject constructor(private var apiService: ApiService, private var userDao: UserDao) {
+class UserRepository constructor(private var apiService: ApiService, private var userDao: UserDao) {
 
     private var pageNumber: Int = 0
-    private var networkBoundSource: NetworkBoundResource<List<User>, RandomUserResponse> = object : NetworkBoundResource<List<User>, RandomUserResponse>() {
-        override fun getRemote(): Single<RandomUserResponse> {
-            return apiService.getUsers(pageNumber)
-        }
-
-        override fun getLocal(): Single<List<User>> {
-            return userDao.getAll()
-        }
-
-        override fun saveCallResult(data: List<User>, isForced: Boolean) {
-            if (isForced) {
-                userDao.deleteAll()
+    private var networkBoundSource: NetworkBoundResource<List<User>, RandomUserResponse> =
+        object : NetworkBoundResource<List<User>, RandomUserResponse>() {
+            override fun getRemote(): Single<RandomUserResponse> {
+                return apiService.getUsers(pageNumber)
             }
-            userDao.insertAllUsers(data)
-        }
 
-        override fun mapper(): Function<RandomUserResponse, List<User>> {
-            return EntityMapper.convert()
+            override fun getLocal(): Single<List<User>> {
+                return userDao.getAll()
+            }
+
+            override fun saveCallResult(data: List<User>, isForced: Boolean) {
+                if (isForced) {
+                    userDao.deleteAll()
+                }
+                userDao.insertAllUsers(data)
+            }
+
+            override fun mapper(): Function<RandomUserResponse, List<User>> {
+                return EntityMapper.convert()
+            }
         }
-    }
-    private var flowable: Flowable<Resource<List<User>>> = Flowable.create(networkBoundSource, BackpressureStrategy.BUFFER)
+    private var flowable: Flowable<Resource<List<User>>> =
+        Flowable.create(networkBoundSource, BackpressureStrategy.BUFFER)
 
     fun getFlowableResourceListUser(): Flowable<Resource<List<User>>> {
         return flowable
