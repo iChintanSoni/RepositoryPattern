@@ -15,7 +15,7 @@ The app is structured with best practices and guidelines which showcases use of:
 * Repository pattern with offline-first strategy
 * MVVM architectural pattern
 * Android Architecture Components
-* Dependency injection using Dagger 2
+* Dependency injection using Koin
 * Network and API call using Retrofit 2
 * Database using Room Architecture Component
 
@@ -27,7 +27,7 @@ You can open the project in Android studio and press run.
 ### Libraries
 * [Android Support Library](https://developer.android.com/topic/libraries/support-library/index.html)
 * [Android Architecture Components](https://developer.android.com/arch)
-* [Dagger 2](https://google.github.io/dagger)
+* [Koin](https://insert-koin.io/)
 * [RxJava 2](https://github.com/ReactiveX/RxJava)
 * [RxAndroid 2](https://github.com/ReactiveX/RxAndroid)
 * [Retrofit 2](http://square.github.io/retrofit)
@@ -40,18 +40,18 @@ Contributing
 ---
 You are most welcome to contribute to this project!
 
-Please have a look at [Contributing Guidelines](https://github.com/ChintanSoni202/RepositoryPattern/blob/master/CONTRIBUTING.md), before contributing and proposing a change.
+Please have a look at [Contributing Guidelines](https://github.com/iChintanSoni/RepositoryPattern/blob/master/CONTRIBUTING.md), before contributing and proposing a change.
 
 ### Pull Request
-To generate a pull request, please consider following [Pull Request Template](https://github.com/ChintanSoni202/RepositoryPattern/blob/master/PULL_REQUEST_TEMPLATE.md).
+To generate a pull request, please consider following [Pull Request Template](https://github.com/iChintanSoni/RepositoryPattern/blob/master/PULL_REQUEST_TEMPLATE.md).
 
 ### Issues
-To submit an issue, please check the [Issue Template](https://github.com/ChintanSoni202/RepositoryPattern/blob/master/ISSUE_TEMPLATE.md).
+To submit an issue, please check the [Issue Template](https://github.com/iChintanSoni/RepositoryPattern/blob/master/ISSUE_TEMPLATE.md).
 
 Code of Conduct
 ---
-[Code of Conduct](https://github.com/ChintanSoni202/RepositoryPattern/blob/master/CODE_OF_CONDUCT.md)
+[Code of Conduct](https://github.com/iChintanSoni/RepositoryPattern/blob/master/CODE_OF_CONDUCT.md)
 
 License
 ---
-[Copyright 2018 Chintan Soni - Apache License 2.0](https://github.com/ChintanSoni202/RepositoryPattern/blob/master/LICENSE.md)
+[Copyright 2018 Chintan Soni - Apache License 2.0](https://github.com/iChintanSoni/RepositoryPattern/blob/master/LICENSE.md)
