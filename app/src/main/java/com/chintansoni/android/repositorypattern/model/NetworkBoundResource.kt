@@ -1,71 +1,47 @@
 package com.chintansoni.android.repositorypattern.model
 
-import com.chintansoni.android.repositorypattern.model.Resource.Companion.loading
-import com.chintansoni.android.repositorypattern.model.Resource.Companion.success
-import io.reactivex.FlowableEmitter
-import io.reactivex.FlowableOnSubscribe
-import io.reactivex.Single
-import io.reactivex.functions.Function
-import io.reactivex.schedulers.Schedulers
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Deferred
 
-abstract class NetworkBoundResource<LocalType, RemoteType> : FlowableOnSubscribe<Resource<LocalType>> {
+abstract class NetworkBoundResource<LocalType, RemoteType> {
 
-    private var emitter: FlowableEmitter<Resource<LocalType>>? = null
+    private val mutableLiveData = MutableLiveData<Resource<LocalType>>()
 
-    override fun subscribe(emitter: FlowableEmitter<Resource<LocalType>>) {
-        this.emitter = emitter
-    }
+    abstract suspend fun getRemoteAsync(): Deferred<RemoteType>
 
-    abstract fun getRemote(): Single<RemoteType>
+    abstract suspend fun getLocal(): LocalType
 
-    abstract fun getLocal(): Single<LocalType>
+    abstract suspend fun saveCallResult(data: LocalType, isForced: Boolean)
 
-    abstract fun saveCallResult(data: LocalType, isForced: Boolean)
+    abstract suspend fun mapper(remoteType: RemoteType): LocalType
 
-    abstract fun mapper(): Function<RemoteType, LocalType>
-
-    fun refresh() {
+    suspend fun refresh() {
         getRemoteData(true)
     }
 
-    fun fetch(isForced: Boolean) {
-        getLocal()
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .flatMap {
-                emitter?.onNext(success(it))
-                return@flatMap getRemote()
-            }.map(mapper())
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .flatMap {
-                saveCallResult(it, isForced)
-                return@flatMap getLocal()
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .subscribe({
-                emitter?.onNext(success(it))
-            }, {
-                emitter?.onNext(Resource.error(it))
-            })
+    suspend fun fetch(isForced: Boolean) {
+        try {
+            mutableLiveData.postValue(Resource.Success(getLocal()))
+            val remoteData = getRemoteAsync().await()
+            saveCallResult(mapper(remoteData), isForced)
+            mutableLiveData.postValue(Resource.Success(getLocal()))
+        } catch (exception: Exception) {
+            mutableLiveData.postValue(Resource.Error(exception))
+        }
     }
 
-    fun getRemoteData(isForced: Boolean) {
-        emitter?.onNext(loading())
-        getRemote().map(mapper())
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .flatMap {
-                saveCallResult(it, isForced)
-                return@flatMap getLocal()
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .subscribe({
-                emitter?.onNext(success(it))
-            }, {
-                emitter?.onNext(Resource.error(it))
-            })
+    suspend fun getRemoteData(isForced: Boolean) {
+        try {
+            mutableLiveData.postValue(Resource.Loading())
+            val remoteData = getRemoteAsync().await()
+            saveCallResult(mapper(remoteData), isForced)
+            mutableLiveData.postValue(Resource.Success(getLocal()))
+        } catch (exception: Exception) {
+            mutableLiveData.postValue(Resource.Error(exception))
+        }
+    }
+
+    fun asLiveData(): MutableLiveData<Resource<LocalType>> {
+        return mutableLiveData
     }
 }
