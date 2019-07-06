@@ -4,7 +4,8 @@ import android.app.Application
 import com.chintansoni.android.repositorypattern.di.databaseModule
 import com.chintansoni.android.repositorypattern.di.networkModule
 import com.chintansoni.android.repositorypattern.di.viewModelModule
-import org.koin.android.ext.android.startKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class MyApplication : Application() {
@@ -17,7 +18,10 @@ class MyApplication : Application() {
     }
 
     private fun initializeKoin() {
-        startKoin(this, listOf(networkModule, databaseModule, viewModelModule))
+        startKoin {
+            androidContext(this@MyApplication)
+            modules(listOf(networkModule, databaseModule, viewModelModule))
+        }
     }
 
     private fun initializeTimber() {

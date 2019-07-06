@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
 
     // Koin
-    def koin_version = "1.0.2"
+    def koin_version = "2.0.1"
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"

@@ -4,7 +4,7 @@ import androidx.room.Room
 import com.chintansoni.android.repositorypattern.model.local.AppDatabase
 import com.chintansoni.android.repositorypattern.model.local.DatabaseConstants
 import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module.module
+import org.koin.dsl.module
 
 val databaseModule = module {
 
