@@ -4,7 +4,6 @@ import com.chintansoni.android.repositorypattern.model.local.dao.UserDao
 import com.chintansoni.android.repositorypattern.model.local.entity.User
 import com.chintansoni.android.repositorypattern.model.remote.ApiService
 import com.chintansoni.android.repositorypattern.model.remote.response.RandomUserResponse
-import kotlinx.coroutines.Deferred
 
 class UserRepository constructor(private var apiService: ApiService, private var userDao: UserDao) {
 
@@ -12,7 +11,7 @@ class UserRepository constructor(private var apiService: ApiService, private var
     private var pageNumber: Int = 0
     private var networkBoundSource: NetworkBoundResource<List<User>, RandomUserResponse> =
             object : NetworkBoundResource<List<User>, RandomUserResponse>() {
-                override suspend fun getRemoteAsync(): Deferred<RandomUserResponse> {
+                override suspend fun getRemoteAsync(): RandomUserResponse {
                     return apiService.getUsers(pageNumber)
                 }
 
