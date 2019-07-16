@@ -2,7 +2,6 @@ package com.chintansoni.android.repositorypattern.di
 
 import com.chintansoni.android.repositorypattern.BuildConfig
 import com.chintansoni.android.repositorypattern.model.remote.ApiService
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,7 +35,6 @@ val networkModule = module {
         Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
                 .client(get())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
     }
