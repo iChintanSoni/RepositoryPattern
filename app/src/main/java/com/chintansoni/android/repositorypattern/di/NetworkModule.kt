@@ -16,7 +16,12 @@ val networkModule = module {
 
     // Dependency: HttpLoggingInterceptor
     single<Interceptor> {
-        HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message -> Timber.tag("OkHttp").d(message) }).apply {
+        HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
+            override fun log(message: String) {
+                Timber.tag("OkHttp").d(message)
+            }
+
+        }).apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
@@ -27,7 +32,7 @@ val networkModule = module {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
-                .addInterceptor(get())
+                .addInterceptor(get<Interceptor>())
                 .build()
     }
 
