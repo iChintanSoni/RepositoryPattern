@@ -7,7 +7,7 @@ abstract class NetworkBoundResource<LocalType, RemoteType> {
 
     private val mutableLiveData = MutableLiveData<Resource<LocalType>>()
 
-    abstract suspend fun getRemoteAsync(): Deferred<RemoteType>
+    abstract suspend fun getRemoteAsync(): RemoteType
 
     abstract suspend fun getLocal(): LocalType
 
@@ -22,7 +22,7 @@ abstract class NetworkBoundResource<LocalType, RemoteType> {
     suspend fun fetch(isForced: Boolean) {
         try {
             mutableLiveData.postValue(Resource.Success(getLocal()))
-            val remoteData = getRemoteAsync().await()
+            val remoteData = getRemoteAsync()
             saveCallResult(mapper(remoteData), isForced)
             mutableLiveData.postValue(Resource.Success(getLocal()))
         } catch (exception: Exception) {
@@ -33,7 +33,7 @@ abstract class NetworkBoundResource<LocalType, RemoteType> {
     suspend fun getRemoteData(isForced: Boolean) {
         try {
             mutableLiveData.postValue(Resource.Loading())
-            val remoteData = getRemoteAsync().await()
+            val remoteData = getRemoteAsync()
             saveCallResult(mapper(remoteData), isForced)
             mutableLiveData.postValue(Resource.Success(getLocal()))
         } catch (exception: Exception) {

@@ -8,11 +8,10 @@ import kotlinx.coroutines.Deferred
 
 class UserRepository constructor(private var apiService: ApiService, private var userDao: UserDao) {
 
-
     private var pageNumber: Int = 0
     private var networkBoundSource: NetworkBoundResource<List<User>, RandomUserResponse> =
             object : NetworkBoundResource<List<User>, RandomUserResponse>() {
-                override suspend fun getRemoteAsync(): Deferred<RandomUserResponse> {
+                override suspend fun getRemoteAsync(): RandomUserResponse {
                     return apiService.getUsers(pageNumber)
                 }
 
